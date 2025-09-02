@@ -19,6 +19,7 @@ import Dashboard from './pages/Dashboard';
 import ProductsPage from './pages/ProductsPage';
 import SalesPage from './pages/SalesPage';
 import ReportsPage from './pages/ReportsPage';
+import CategoriesPage from './pages/CategoriesPage';
 
 // Create theme
 const theme = createTheme({
@@ -84,6 +85,14 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <ReportsPage />
+                </Layout>
+              </ProtectedRoute>
+            } />
+
+            <Route path="/categories" element={
+              <ProtectedRoute>
+                <Layout>
+                  <CategoriesPage />
                 </Layout>
               </ProtectedRoute>
             } />

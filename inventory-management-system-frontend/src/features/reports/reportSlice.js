@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import reportService from './reportService';
+import reportApi from '../../api/reportApi';
 
 // Get stock report
 export const getStockReport = createAsyncThunk(
@@ -69,11 +69,30 @@ export const getTopProducts = createAsyncThunk(
   }
 );
 
+// Get KPIs
+export const getKpis = createAsyncThunk('reports/getKpis', async (_, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user.jwt;
+    return await reportApi.getKpis(token);
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
 const initialState = {
   stockReport: [],
   dailySales: [],
   monthlySales: [],
   topProducts: [],
+  kpis: {
+    totalProducts: 0,
+    totalStockValue: 0,
+    totalSales: 0,
+  },
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -136,6 +155,19 @@ export const reportSlice = createSlice({
         state.topProducts = action.payload;
       })
       .addCase(getTopProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getKpis.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getKpis.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.kpis = action.payload;
+      })
+      .addCase(getKpis.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

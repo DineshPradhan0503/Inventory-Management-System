@@ -80,4 +80,23 @@ public class ReportService {
                 .limit(5) // Top 5 products
                 .collect(Collectors.toList());
     }
+
+    // 5. Get total products
+    public Long getTotalProducts() {
+        return productRepository.count();
+    }
+
+    // 6. Get total stock value
+    public Double getTotalStockValue() {
+        return productRepository.findAll().stream()
+                .mapToDouble(product -> product.getPrice() * product.getStock())
+                .sum();
+    }
+
+    // 7. Get total sales
+    public Double getTotalSales() {
+        return saleRepository.findAll().stream()
+                .mapToDouble(sale -> sale.getPrice() * sale.getQuantity())
+                .sum();
+    }
 }
