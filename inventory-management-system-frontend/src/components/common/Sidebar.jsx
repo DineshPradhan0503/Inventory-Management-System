@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Drawer, 
@@ -29,12 +30,24 @@ const menuItems = [
 function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const { user } = useSelector((state) => state.auth);
 
-  const handleListItemClick = (index, path) => {
-    setSelectedIndex(index);
+  const handleListItemClick = (path) => {
     navigate(path);
   };
+
+  const filteredMenuItems = menuItems.filter((item) => {
+    if (item.path === '/products' || item.path === '/') {
+      return user && (user.role === 'ROLE_ADMIN' || user.role === 'ROLE_USER');
+    }
+    if (item.path === '/sales') {
+      return user && user.role === 'ROLE_USER';
+    }
+    if (item.path === '/reports') {
+      return user && user.role === 'ROLE_ADMIN';
+    }
+    return true;
+  });
 
   return (
     <Drawer
@@ -57,11 +70,11 @@ function Sidebar() {
       </Box>
       <Divider />
       <List>
-        {menuItems.map((item, index) => (
+        {filteredMenuItems.map((item, index) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton
               selected={location.pathname === item.path}
-              onClick={() => handleListItemClick(index, item.path)}
+              onClick={() => handleListItemClick(item.path)}
               sx={{
                 '&.Mui-selected': {
                   backgroundColor: 'rgba(255, 255, 255, 0.1)',

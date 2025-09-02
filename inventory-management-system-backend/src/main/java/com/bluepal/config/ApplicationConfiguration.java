@@ -27,7 +27,7 @@ public class ApplicationConfiguration {
 
 						.requestMatchers("/api/user/profile","/api/user/all","/products/all")
 						.hasAnyRole("USER", "ADMIN")
-						.requestMatchers("/products/add","/products/update/{id}","/products/delete/{id}","/sales/all","/reports/*").hasRole("ADMIN")
+						.requestMatchers("/products/add","/products/update/{id}","/products/delete/{id}","/sales/all","/reports/*", "/api/categories/**").hasRole("ADMIN")
 						.requestMatchers( "/api/products/my-products","/sales/record").hasRole("USER")
 								
 						

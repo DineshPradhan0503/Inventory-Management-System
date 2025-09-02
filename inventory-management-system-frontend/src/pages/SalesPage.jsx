@@ -22,6 +22,7 @@ function SalesPage() {
     (state) => state.sales
   );
   const { products } = useSelector((state) => state.products);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getSales());
@@ -51,29 +52,33 @@ function SalesPage() {
 
       <Grid container spacing={3}>
         {/* Sale Form */}
-        <Grid item xs={12} md={5}>
-          <Card sx={{ height: '100%' }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <ShoppingCartIcon sx={{ mr: 1 }} />
-                <Typography variant="h6">Record New Sale</Typography>
-              </Box>
-              <SaleForm />
-            </CardContent>
-          </Card>
-        </Grid>
+        {user && user.role === 'ROLE_USER' && (
+          <Grid item xs={12} md={5}>
+            <Card sx={{ height: '100%' }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <ShoppingCartIcon sx={{ mr: 1 }} />
+                  <Typography variant="h6">Record New Sale</Typography>
+                </Box>
+                <SaleForm />
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
 
         {/* Sales History */}
-        <Grid item xs={12} md={7}>
-          <Card sx={{ height: '100%' }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Sales History
-              </Typography>
-              <SaleHistory />
-            </CardContent>
-          </Card>
-        </Grid>
+        {user && user.role === 'ROLE_ADMIN' && (
+          <Grid item xs={12} md={7}>
+            <Card sx={{ height: '100%' }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Sales History
+                </Typography>
+                <SaleHistory />
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
       </Grid>
     </Container>
   );

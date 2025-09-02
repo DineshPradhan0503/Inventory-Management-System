@@ -44,6 +44,8 @@ function ProductsPage() {
     (state) => state.products
   );
 
+  const { user } = useSelector((state) => state.auth);
+
   useEffect(() => {
     dispatch(getProducts());
 
@@ -104,13 +106,15 @@ function ProductsPage() {
           <Typography variant="h4" component="h1">
             Products
           </Typography>
-          <Button 
-            variant="contained" 
-            startIcon={<AddIcon />}
-            onClick={handleAddProduct}
-          >
-            Add Product
-          </Button>
+          {user && user.role === 'ROLE_ADMIN' && (
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={handleAddProduct}
+            >
+              Add Product
+            </Button>
+          )}
         </Box>
         
         <Typography variant="body1" color="text.secondary">
@@ -174,20 +178,24 @@ function ProductsPage() {
                     </TableCell>
                     <TableCell>{product.threshold}</TableCell>
                     <TableCell>
-                      <IconButton 
-                        aria-label="edit" 
-                        onClick={() => handleEditProduct(product)}
-                        color="primary"
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton 
-                        aria-label="delete" 
-                        onClick={() => handleDeleteProduct(product.id)}
-                        color="error"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      {user && user.role === 'ROLE_ADMIN' && (
+                        <>
+                          <IconButton
+                            aria-label="edit"
+                            onClick={() => handleEditProduct(product)}
+                            color="primary"
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            aria-label="delete"
+                            onClick={() => handleDeleteProduct(product.id)}
+                            color="error"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
