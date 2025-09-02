@@ -20,6 +20,7 @@ import ProductsPage from './pages/ProductsPage';
 import SalesPage from './pages/SalesPage';
 import ReportsPage from './pages/ReportsPage';
 import CategoriesPage from './pages/CategoriesPage';
+import RegisterPage from './pages/RegisterPage';
 
 // Create theme
 const theme = createTheme({
@@ -59,8 +60,9 @@ function App() {
         <CssBaseline />
         <Router>
           <Routes>
-            {/* Public Route - Login */}
+            {/* Public Routes */}
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<RegisterPage />} />
             
             {/* Protected Routes with Layout */}
             <Route path="/" element={

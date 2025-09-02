@@ -27,6 +27,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  CircularProgress,
 } from '@mui/material';
 import { 
   Add as AddIcon, 
@@ -251,11 +252,24 @@ function ProductsPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {sortedAndFilteredProducts
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((product) => (
-                  <TableRow
-                    key={product.id}
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={7} align="center">
+                    <CircularProgress />
+                  </TableCell>
+                </TableRow>
+              ) : sortedAndFilteredProducts.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} align="center">
+                    No products found.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                sortedAndFilteredProducts
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((product) => (
+                    <TableRow
+                      key={product.id}
                     sx={{
                       '&:last-child td, &:last-child th': { border: 0 },
                       backgroundColor: product.stock === 0 ? 'rgba(255, 0, 0, 0.1)' : product.stock <= product.threshold ? 'rgba(255, 152, 0, 0.1)' : 'inherit'
@@ -298,7 +312,8 @@ function ProductsPage() {
                       )}
                     </TableCell>
                   </TableRow>
-                ))}
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>
