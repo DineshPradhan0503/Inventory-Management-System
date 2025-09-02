@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { login, reset } from '../../features/auth/authSlice';
-import { FaSignInAlt } from 'react-icons/fa';
+import { register, reset } from '../../features/auth/authSlice';
+import { FaUserPlus } from 'react-icons/fa';
 
-import { 
-  Container, 
-  Paper, 
-  TextField, 
-  Button, 
-  Typography, 
+import {
+  Container,
+  Paper,
+  TextField,
+  Button,
+  Typography,
   Box,
   InputAdornment,
   IconButton,
@@ -21,14 +21,16 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-function Login() {
+function Register() {
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     password: '',
+    password2: '',
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  const { email, password } = formData;
+  const { username, email, password, password2 } = formData;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -58,12 +60,16 @@ function Login() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const userData = {
-      email,
-      password,
-    };
-
-    dispatch(login(userData));
+    if (password !== password2) {
+      toast.error('Passwords do not match');
+    } else {
+      const userData = {
+        username,
+        email,
+        password,
+      };
+      dispatch(register(userData));
+    }
   };
 
   const handleClickShowPassword = () => {
@@ -82,17 +88,29 @@ function Login() {
       >
         <Paper elevation={3} sx={{ p: 4, width: '100%' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-            <FaSignInAlt size={24} style={{ marginRight: 8 }} />
+            <FaUserPlus size={24} style={{ marginRight: 8 }} />
             <Typography component="h1" variant="h5">
-              Login
+              Register
             </Typography>
           </Box>
-          
+
           <Typography variant="body2" sx={{ mb: 3, textAlign: 'center' }}>
-            Login and start managing inventory
+            Create an account to get started
           </Typography>
-          
+
           <Box component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
+              autoFocus
+              value={username}
+              onChange={onChange}
+            />
             <TextField
               margin="normal"
               required
@@ -101,7 +119,6 @@ function Login() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
               value={email}
               onChange={onChange}
             />
@@ -127,6 +144,17 @@ function Login() {
                 label="Password"
               />
             </FormControl>
+            <FormControl margin="normal" required fullWidth variant="outlined">
+              <InputLabel htmlFor="password2">Confirm Password</InputLabel>
+              <OutlinedInput
+                id="password2"
+                name="password2"
+                type={showPassword ? 'text' : 'password'}
+                value={password2}
+                onChange={onChange}
+                label="Confirm Password"
+              />
+            </FormControl>
             <Button
               type="submit"
               fullWidth
@@ -134,12 +162,12 @@ function Login() {
               sx={{ mt: 3, mb: 2, py: 1.5 }}
               disabled={isLoading}
             >
-              {isLoading ? 'Signing In...' : 'Sign In'}
+              {isLoading ? 'Registering...' : 'Register'}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link to="/register" variant="body2">
-                  Don't have an account? Sign Up
+                <Link to="/login" variant="body2">
+                  Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
@@ -155,4 +183,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
