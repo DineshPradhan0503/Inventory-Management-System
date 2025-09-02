@@ -44,6 +44,7 @@ public class AuthService {
 
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("ROLE_USER");
         return userRepository.save(user);
     }
     
@@ -56,10 +57,13 @@ public class AuthService {
         String token = jwtProvider.generateToken(authentication);
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
+        String role = authorities.stream().findFirst().get().getAuthority();
+
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(token);
         authResponse.setMessage("Login Success");
         authResponse.setStatus(true);
+        authResponse.setRole(role);
      
 
         return authResponse;

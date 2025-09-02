@@ -46,6 +46,8 @@ function ReportsPage() {
     message,
   } = useSelector((state) => state.reports);
 
+  const { user } = useSelector((state) => state.auth);
+
   useEffect(() => {
     dispatch(getStockReport());
     dispatch(getDailySales());
@@ -75,6 +77,16 @@ function ReportsPage() {
 
   if (isLoading) {
     return <div>Loading reports...</div>;
+  }
+
+  if (user && user.role !== 'ROLE_ADMIN') {
+    return (
+      <Container maxWidth="xl">
+        <Typography variant="h4" component="h1" align="center" sx={{ mt: 4 }}>
+          You are not authorized to view this page.
+        </Typography>
+      </Container>
+    );
   }
 
   return (
