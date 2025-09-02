@@ -13,11 +13,13 @@ import {
   Grid,
   Paper,
 } from '@mui/material';
+import { getCategories } from '../../features/categories/categorySlice';
 import { createProduct, updateProduct } from '../../features/products/productSlice';
 
 function ProductForm({ product, onClose }) {
   const dispatch = useDispatch();
   const { isLoading, isSuccess } = useSelector((state) => state.products);
+  const { categories } = useSelector((state) => state.categories);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -29,6 +31,10 @@ function ProductForm({ product, onClose }) {
   });
 
   const { name, category, description, price, stock, threshold } = formData;
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
 
   useEffect(() => {
     if (product) {
@@ -87,12 +93,11 @@ function ProductForm({ product, onClose }) {
                   onChange={onChange}
                   label="Category"
                 >
-                  <MenuItem value="Electronics">Electronics</MenuItem>
-                  <MenuItem value="Clothing">Clothing</MenuItem>
-                  <MenuItem value="Food">Food</MenuItem>
-                  <MenuItem value="Books">Books</MenuItem>
-                  <MenuItem value="Home">Home</MenuItem>
-                  <MenuItem value="Other">Other</MenuItem>
+                  {categories.map((category) => (
+                    <MenuItem key={category.id} value={category.name}>
+                      {category.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>

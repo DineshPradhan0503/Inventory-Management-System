@@ -20,19 +20,15 @@ import {
   FaPlus
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { getProducts, reset as productReset } from '../features/products/productSlice';
-import { getSales, reset as saleReset } from '../features/sales/saleSlice';
+import { getKpis, reset as reportReset } from '../features/reports/reportSlice';
 
 function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
-  const { products, isLoading: productLoading, isError: productError } = useSelector(
-    (state) => state.products
-  );
-  const { sales, isLoading: saleLoading, isError: saleError } = useSelector(
-    (state) => state.sales
+  const { kpis, isLoading, isError, message } = useSelector(
+    (state) => state.reports
   );
 
   useEffect(() => {
@@ -40,32 +36,20 @@ function Dashboard() {
       navigate('/login');
     }
 
-    dispatch(getProducts());
-    dispatch(getSales());
+    dispatch(getKpis());
 
     return () => {
-      dispatch(productReset());
-      dispatch(saleReset());
+      dispatch(reportReset());
     };
   }, [user, navigate, dispatch]);
 
   useEffect(() => {
-    if (productError) {
-      toast.error(productError);
+    if (isError) {
+      toast.error(message);
     }
-    if (saleError) {
-      toast.error(saleError);
-    }
-  }, [productError, saleError]);
+  }, [isError, message]);
 
-  // Calculate metrics
-  const totalProducts = products ? products.length : 0;
-  const totalSales = sales ? sales.length : 0;
-  const lowStockProducts = products
-    ? products.filter((product) => product.stock <= product.threshold).length
-    : 0;
-
-  if (productLoading || saleLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
@@ -93,7 +77,7 @@ function Dashboard() {
                   Total Products
                 </Typography>
                 <Typography variant="h4" component="div">
-                  {totalProducts}
+                  {kpis.totalProducts}
                 </Typography>
               </Box>
             </CardContent>
@@ -111,7 +95,7 @@ function Dashboard() {
                   Total Sales
                 </Typography>
                 <Typography variant="h4" component="div">
-                  {totalSales}
+                  ${kpis.totalSales.toFixed(2)}
                 </Typography>
               </Box>
             </CardContent>
@@ -121,15 +105,15 @@ function Dashboard() {
         <Grid item xs={12} sm={6} md={3}>
           <Card sx={{ height: '100%' }}>
             <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ mr: 2, color: 'warning.main' }}>
-                <FaExclamationTriangle size={32} />
+              <Box sx={{ mr: 2, color: 'info.main' }}>
+                <FaChartLine size={32} />
               </Box>
               <Box>
                 <Typography color="textSecondary" gutterBottom>
-                  Low Stock Products
+                  Stock Value
                 </Typography>
                 <Typography variant="h4" component="div">
-                  {lowStockProducts}
+                  ${kpis.totalStockValue.toFixed(2)}
                 </Typography>
               </Box>
             </CardContent>
@@ -176,32 +160,6 @@ function Dashboard() {
           </Card>
         </Grid>
 
-        {/* Low Stock Alerts */}
-        <Grid item xs={12}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Low Stock Alerts
-            </Typography>
-            {products && products.filter(p => p.stock <= p.threshold).length > 0 ? (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                {products
-                  .filter(product => product.stock <= product.threshold)
-                  .map(product => (
-                    <Chip 
-                      key={product.id}
-                      label={`${product.name} (${product.stock} left)`}
-                      color="warning"
-                      variant="outlined"
-                    />
-                  ))}
-              </Box>
-            ) : (
-              <Typography variant="body2" color="textSecondary">
-                No products with low stock at the moment.
-              </Typography>
-            )}
-          </Paper>
-        </Grid>
       </Grid>
     </Box>
   );

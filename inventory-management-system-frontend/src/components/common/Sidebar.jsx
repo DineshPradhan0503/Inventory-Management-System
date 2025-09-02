@@ -17,12 +17,14 @@ import {
   Inventory as InventoryIcon,
   PointOfSale as SalesIcon,
   Assessment as ReportsIcon,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
+  Category as CategoryIcon
 } from '@mui/icons-material';
 
 const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
   { text: 'Products', icon: <InventoryIcon />, path: '/products' },
+  { text: 'Categories', icon: <CategoryIcon />, path: '/categories' },
   { text: 'Sales', icon: <SalesIcon />, path: '/sales' },
   { text: 'Reports', icon: <ReportsIcon />, path: '/reports' },
 ];
@@ -43,7 +45,7 @@ function Sidebar() {
     if (item.path === '/sales') {
       return user && user.role === 'ROLE_USER';
     }
-    if (item.path === '/reports') {
+    if (item.path === '/reports' || item.path === '/categories') {
       return user && user.role === 'ROLE_ADMIN';
     }
     return true;
