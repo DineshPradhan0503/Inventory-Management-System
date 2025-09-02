@@ -29,6 +29,7 @@ import {
   getTopProducts,
   reset,
 } from '../features/reports/reportSlice';
+import exportApi from '../api/exportApi';
 import SalesChart from '../components/reports/SalesChart';
 import StockChart from '../components/reports/StockChart';
 
@@ -65,14 +66,36 @@ function ReportsPage() {
     }
   }, [isError, message]);
 
-  const handleExportPDF = () => {
-    // Implement PDF export functionality
-    toast.info('PDF export functionality to be implemented');
+  const handleExportPDF = async () => {
+    try {
+      const token = user.jwt;
+      const data = await exportApi.exportStockPdf(token);
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'stock-report.pdf');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      toast.error('Failed to export PDF');
+    }
   };
 
-  const handleExportExcel = () => {
-    // Implement Excel export functionality
-    toast.info('Excel export functionality to be implemented');
+  const handleExportExcel = async () => {
+    try {
+      const token = user.jwt;
+      const data = await exportApi.exportStockExcel(token);
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'stock-report.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      toast.error('Failed to export Excel');
+    }
   };
 
   if (isLoading) {
