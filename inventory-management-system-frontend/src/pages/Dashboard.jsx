@@ -13,12 +13,13 @@ import {
   Chip
 } from '@mui/material';
 import { 
-  FaBox, 
-  FaShoppingCart, 
-  FaExclamationTriangle,
-  FaChartLine,
-  FaPlus
-} from 'react-icons/fa';
+  Inventory,
+  PointOfSale,
+  Assessment,
+  AddShoppingCart,
+  Add,
+  BarChart
+} from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { getKpis, reset as reportReset } from '../features/reports/reportSlice';
 
@@ -66,98 +67,87 @@ function Dashboard() {
 
       <Grid container spacing={3}>
         {/* Summary Cards */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: '100%' }}>
-            <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ mr: 2, color: 'primary.main' }}>
-                <FaBox size={32} />
-              </Box>
-              <Box>
-                <Typography color="textSecondary" gutterBottom>
-                  Total Products
-                </Typography>
-                <Typography variant="h4" component="div">
-                  {kpis.totalProducts}
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
+        <Grid item xs={12} sm={6} md={4}>
+          <Paper sx={{ p: 3, display: 'flex', alignItems: 'center', height: '100%' }} elevation={3}>
+            <Avatar sx={{ bgcolor: 'primary.main', width: 56, height: 56, mr: 2 }}>
+              <Inventory />
+            </Avatar>
+            <Box>
+              <Typography color="textSecondary" gutterBottom>
+                Total Products
+              </Typography>
+              <Typography variant="h4" component="div">
+                {kpis.totalProducts}
+              </Typography>
+            </Box>
+          </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: '100%' }}>
-            <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ mr: 2, color: 'success.main' }}>
-                <FaShoppingCart size={32} />
-              </Box>
-              <Box>
-                <Typography color="textSecondary" gutterBottom>
-                  Total Sales
-                </Typography>
-                <Typography variant="h4" component="div">
-                  ${kpis.totalSales.toFixed(2)}
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
+        <Grid item xs={12} sm={6} md={4}>
+          <Paper sx={{ p: 3, display: 'flex', alignItems: 'center', height: '100%' }} elevation={3}>
+            <Avatar sx={{ bgcolor: 'success.main', width: 56, height: 56, mr: 2 }}>
+              <PointOfSale />
+            </Avatar>
+            <Box>
+              <Typography color="textSecondary" gutterBottom>
+                Total Sales
+              </Typography>
+              <Typography variant="h4" component="div">
+                ${kpis.totalSales.toFixed(2)}
+              </Typography>
+            </Box>
+          </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: '100%' }}>
-            <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ mr: 2, color: 'info.main' }}>
-                <FaChartLine size={32} />
-              </Box>
-              <Box>
-                <Typography color="textSecondary" gutterBottom>
-                  Stock Value
-                </Typography>
-                <Typography variant="h4" component="div">
-                  ${kpis.totalStockValue.toFixed(2)}
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
+        <Grid item xs={12} sm={6} md={4}>
+          <Paper sx={{ p: 3, display: 'flex', alignItems: 'center', height: '100%' }} elevation={3}>
+            <Avatar sx={{ bgcolor: 'info.main', width: 56, height: 56, mr: 2 }}>
+              <Assessment />
+            </Avatar>
+            <Box>
+              <Typography color="textSecondary" gutterBottom>
+                Stock Value
+              </Typography>
+              <Typography variant="h4" component="div">
+                ${kpis.totalStockValue.toFixed(2)}
+              </Typography>
+            </Box>
+          </Paper>
         </Grid>
 
         {/* Quick Actions */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: '100%' }}>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
-                Quick Actions
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Button 
-                  variant="contained" 
-                  startIcon={<FaPlus />}
-                  component={Link}
-                  to="/products"
-                  size="small"
-                >
-                  Add Product
-                </Button>
-                <Button 
-                  variant="outlined" 
-                  startIcon={<FaShoppingCart />}
-                  component={Link}
-                  to="/sales"
-                  size="small"
-                >
-                  Record Sale
-                </Button>
-                <Button 
-                  variant="outlined" 
-                  startIcon={<FaChartLine />}
-                  component={Link}
-                  to="/reports"
-                  size="small"
-                >
-                  View Reports
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
+        <Grid item xs={12}>
+          <Paper sx={{ p: 3 }} elevation={3}>
+            <Typography variant="h6" gutterBottom>
+              Quick Actions
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <Button
+                variant="contained"
+                startIcon={<Add />}
+                component={Link}
+                to="/products"
+              >
+                Add Product
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<AddShoppingCart />}
+                component={Link}
+                to="/sales"
+              >
+                Record Sale
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<BarChart />}
+                component={Link}
+                to="/reports"
+              >
+                View Reports
+              </Button>
+            </Box>
+          </Paper>
         </Grid>
 
       </Grid>

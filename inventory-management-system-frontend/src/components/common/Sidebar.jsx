@@ -60,14 +60,14 @@ function Sidebar() {
         '& .MuiDrawer-paper': {
           width: 240,
           boxSizing: 'border-box',
-          backgroundColor: '#2d3748',
+          backgroundColor: 'primary.main',
           color: 'white',
         },
       }}
     >
       <Box sx={{ p: 2 }}>
         <Typography variant="h6" component="div">
-          IMS
+          Inventory Pro
         </Typography>
       </Box>
       <Divider />
@@ -79,10 +79,10 @@ function Sidebar() {
               onClick={() => handleListItemClick(item.path)}
               sx={{
                 '&.Mui-selected': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  backgroundColor: 'primary.dark',
                 },
                 '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  backgroundColor: 'primary.light',
                 },
               }}
             >

@@ -25,11 +25,17 @@ import CategoriesPage from './pages/CategoriesPage';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#5E35B1',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#FFC107',
     },
+    background: {
+      default: '#F5F5F5',
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, sans-serif',
   },
 });
 

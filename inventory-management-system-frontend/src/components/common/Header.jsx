@@ -26,19 +26,10 @@ function Header() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" color="default" elevation={1}>
       <Toolbar>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ mr: 2 }}
-        >
-          <MenuIcon />
-        </IconButton>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Inventory Management System
+          {/* This space is for the page title, which can be managed with a global state */}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography variant="body1" sx={{ mr: 2 }}>
@@ -52,7 +43,9 @@ function Header() {
             onClick={handleMenu}
             color="inherit"
           >
-            <AccountCircle />
+            <Avatar sx={{ bgcolor: 'secondary.main' }}>
+              {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
+            </Avatar>
           </IconButton>
           <Menu
             id="menu-appbar"
